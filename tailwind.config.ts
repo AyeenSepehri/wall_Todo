@@ -9,8 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        'sedri-green': '#B8E090',
+        'box-green': "#ABD89B"
       },
     },
   },
