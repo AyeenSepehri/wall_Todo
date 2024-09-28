@@ -1,3 +1,4 @@
+// CardDataTypes defines the structure for the data related to a task card
 export interface CardDataTypes {
     id: number | string;
     title: string;
@@ -6,4 +7,9 @@ export interface CardDataTypes {
     status: string;
     startDate?: null | string | undefined;
     endDate?: null | string | undefined;
+}
+
+// CardProps defines the props expected by the Card component
+export interface CardProps {
+    cardData: CardDataTypes;
 }

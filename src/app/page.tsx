@@ -14,12 +14,7 @@ export default function Home() {
               <div>
                   <TodoColumn/>
               </div>
-              <div>
-                  <TodoColumn/>
-              </div>
-              <div>
-                  <TodoColumn/>
-              </div>
+
           </div>
 
       </div>
