@@ -1,6 +1,7 @@
 import {HeaderSection} from "@/components/headerSection/HeaderSection";
 import {TodoColumn} from "@/components/ColumnOfWorks/TodoColumn/TodoColumn";
 import {InProgressColumn} from "@/components/ColumnOfWorks/InProgressColumn/InProgressColumn";
+import {DoneColumn} from "@/components/ColumnOfWorks/DoneColumn/DoneColumn";
 
 export default function Home() {
   return (
@@ -15,9 +16,11 @@ export default function Home() {
               <div>
                   <TodoColumn/>
               </div>
-
               <div>
                   <InProgressColumn/>
+              </div>
+              <div>
+                  <DoneColumn/>
               </div>
           </div>
 
