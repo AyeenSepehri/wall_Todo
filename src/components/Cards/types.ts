@@ -5,6 +5,7 @@ export interface CardDataTypes {
     registrationDate: string;
     deadline: string;
     status: string;
+    isDelayed: boolean
     startDate?: null | string | undefined;
     endDate?: null | string | undefined;
 }
