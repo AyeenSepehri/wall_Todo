@@ -1,10 +1,16 @@
-import Image from "next/image";
+"use client"
+import React, { useState } from 'react';
+import Image from 'next/image';
 import todoIcon from "../../../../public/icons/todoIcon.svg";
 import plusSignIcon from "../../../../public/icons/plusSign.svg";
 import { Card } from "@/components/Cards/Card";
 import { CardDataTypes } from "@/components/Cards/types";
+import { Modal } from '@/components/Modal/Modal';
+import {AddWorkModal} from "@/components/Modal/AddWorkModal/AddWorkModal"; // Import the Modal component
 
 export const TodoColumn = () => {
+    const [isModalOpen, setModalOpen] = useState(false);
+
     const demoTodoData: CardDataTypes[] = [
         {
             id: 1,
@@ -53,12 +59,13 @@ export const TodoColumn = () => {
                 </div>
             </div>
 
-            <div
-                className="my-8 border-2 border-dashed border-box-green rounded-lg flex flex-col justify-center items-center gap-2 p-5"
+            <button
+                className="w-full my-8 border-2 border-dashed border-box-green rounded-lg flex flex-col justify-center items-center gap-2 p-5"
+                onClick={() => setModalOpen(true)}
             >
                 <Image src={plusSignIcon} alt={"plusSignIcon"} />
                 <span className="text-md text-box-green">افزودن کار جدید</span>
-            </div>
+            </button>
 
             <div>
                 {demoTodoData.map((item) => (
@@ -67,6 +74,11 @@ export const TodoColumn = () => {
                     </div>
                 ))}
             </div>
+
+            {/* Render the modal when open */}
+            <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} title="افزودن کار جدید">
+                <AddWorkModal/>
+            </Modal>
         </div>
     );
 };
