@@ -25,8 +25,11 @@ const worksSlice = createSlice({
                 state.push(action.payload);
             }
         },
+        deleteTodo: (state, action: PayloadAction<string>) => {
+            return state.filter((todo) => todo.id !== action.payload);
+        },
     },
 });
 
-export const { addOrUpdateTodo } = worksSlice.actions;
+export const { addOrUpdateTodo, deleteTodo } = worksSlice.actions;
 export default worksSlice.reducer;

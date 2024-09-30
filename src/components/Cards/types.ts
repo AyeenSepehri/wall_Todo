@@ -1,6 +1,6 @@
 // CardDataTypes defines the structure for the data related to a task card
 export interface CardDataTypes {
-    id: number | string;
+    id: string;
     title: string;
     registrationDate: string;
     deadline: string;

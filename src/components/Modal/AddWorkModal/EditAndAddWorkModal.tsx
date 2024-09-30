@@ -1,29 +1,68 @@
-import { useState } from "react";
-import { TodoDatePicker } from "@/components/Modal/AddWorkModal/features/DatePicker/TodoDatePicker";
-import { useDispatch } from "react-redux";
-import { addOrUpdateTodo } from "@/store/states/worksSlice";
-import { Value } from "react-multi-date-picker";
-import { v4 as uuidv4 } from "uuid";
+import {useState} from "react";
+import {TodoDatePicker} from "@/components/Modal/AddWorkModal/features/DatePicker/TodoDatePicker";
+import {useDispatch} from "react-redux";
+import {addOrUpdateTodo} from "@/store/states/worksSlice";
+import {Value} from "react-multi-date-picker";
+import {v4 as uuidv4} from "uuid";
+import jalaali from "jalaali-js";
+import {EditAndAddWorkModalProps} from "@/components/Modal/AddWorkModal/types";
 
-export const AddWorkModal = () => {
-    const [title, setTitle] = useState("");
-    const [selectedDate, setSelectedDate] = useState<Value | null>(null);
-    const [selectedHour, setSelectedHour] = useState<string>(""); // State for hour
-    const [selectedMinute, setSelectedMinute] = useState<string>(""); // State for minute
+const convertToJalaliDate = (gregorianDate: string): any => {
+    const date = new Date(gregorianDate);
+    const jalaliDate = jalaali.toJalaali(
+        date.getFullYear(),
+        date.getMonth() + 1,
+        date.getDate()
+    );
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    // Format Jalali date as a string (YYYY/MM/DD)
+    return ({
+        date: `${jalaliDate.jy}/${jalaliDate.jm < 10 ? `0${jalaliDate.jm}` : jalaliDate.jm}/${jalaliDate.jd < 10 ? `0${jalaliDate.jd}` : jalaliDate.jd}`,
+        clock: `${hours}:${minutes}`
+    })
+};
+
+export const EditAndAddWorkModal = ({onClose, todoItem}: EditAndAddWorkModalProps) => {
+    const [title, setTitle] = useState(todoItem?.title ? todoItem.title : "");
+    const [selectedDate, setSelectedDate] = useState<Value | null>(todoItem?.deadline ? convertToJalaliDate(todoItem?.deadline).date :null);
+    const [selectedHour, setSelectedHour] = useState<string>(todoItem?.deadline ? convertToJalaliDate(todoItem?.deadline).clock.split(":")[0] : ""); // State for hour
+    const [selectedMinute, setSelectedMinute] = useState<string>(todoItem?.deadline ? convertToJalaliDate(todoItem?.deadline).clock.split(":")[1] : ""); // State for minute
     const dispatch = useDispatch();
-
 
     // Helper function to convert Jalali selected date to Gregorian Date and set hours/minutes
     const createDeadlineDate = (date: any, hour: string, minute: string): Date | null => {
         if (!date) return null; // Check if date is null or invalid
 
-        const gregorianDate = date?.toDate(); // Convert Jalali date to Gregorian
-        if (!gregorianDate || isNaN(gregorianDate.getTime())) return null; // Check if date is valid
+        let year, month, day;
 
-        // Set the hour and minute, and make sure seconds are set to zero
-        gregorianDate.setHours(Number(hour), Number(minute), 0, 0); // Set hours, minutes, and seconds
-        return gregorianDate;
+        // Check if date is an object with "year", "month", and "day" properties
+        if (typeof date === "object" && date.year && date.month && date.day) {
+            // Use the date object directly
+            year = date.year;
+            month = date.month;
+            day = date.day;
+        } else if (typeof date === "string") {
+            // If date is a string, assume the format is "YYYY/MM/DD" and split it
+            [year, month, day] = date.split("/").map(Number);
+        } else {
+            return null; // Handle unexpected date formats
+        }
+
+        // Convert the Jalali date to a Gregorian date using jalaali-js
+        const gregorianDate = jalaali.toGregorian(year, month, day);
+
+        // Create a new Date object using the Gregorian date
+        const finalDate = new Date(gregorianDate.gy, gregorianDate.gm - 1, gregorianDate.gd);
+
+        // Set the hour and minute, and ensure seconds are set to zero
+        finalDate.setHours(Number(hour), Number(minute), 0, 0);
+
+        // Return the Date object
+        return finalDate;
     };
+
 
     const handleAddWork = () => {
         if (!title || !selectedDate) {
@@ -34,7 +73,7 @@ export const AddWorkModal = () => {
         const registrationDate = new Date(); // Exact time when the button is clicked
         const deadline = createDeadlineDate(selectedDate, selectedHour, selectedMinute); // Combine date and time for deadline
 
-        console.log(registrationDate , deadline)
+        console.log(registrationDate, deadline)
         if (!deadline) {
             alert("Invalid date or time selected!");
             return;
@@ -43,7 +82,7 @@ export const AddWorkModal = () => {
         // Dispatch the new todo item with uuid as the unique id
         dispatch(
             addOrUpdateTodo({
-                id: uuidv4(), // Generate a unique ID using uuid
+                id: todoItem?.id ? todoItem?.id :uuidv4(), // Generate a unique ID using uuid
                 title,
                 registrationDate: registrationDate.toISOString(), // Dispatch registration date as a string in ISO format
                 deadline: deadline.toISOString(), // Dispatch deadline date as a string in ISO format
@@ -59,6 +98,7 @@ export const AddWorkModal = () => {
         setSelectedDate(null);
         setSelectedHour("00");
         setSelectedMinute("00");
+        onClose()
     };
 
     return (
@@ -90,7 +130,7 @@ export const AddWorkModal = () => {
                         onChange={(e) => setSelectedMinute(e.target.value)}
                     >
                         <option>دقیقه</option>
-                        {Array.from({ length: 60 }, (_, i) => (
+                        {Array.from({length: 60}, (_, i) => (
                             <option key={i} value={i < 10 ? `0${i}` : i}>
                                 {i < 10 ? `0${i}` : i}
                             </option>
@@ -106,7 +146,7 @@ export const AddWorkModal = () => {
                         onChange={(e) => setSelectedHour(e.target.value)}
                     >
                         <option>ساعت</option>
-                        {Array.from({ length: 24 }, (_, i) => (
+                        {Array.from({length: 24}, (_, i) => (
                             <option key={i} value={i < 10 ? `0${i}` : i}>
                                 {i < 10 ? `0${i}` : i}
                             </option>

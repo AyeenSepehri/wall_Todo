@@ -6,7 +6,7 @@ import plusSignIcon from "../../../../public/icons/plusSign.svg";
 import {Card} from "@/components/Cards/Card";
 import {CardDataTypes} from "@/components/Cards/types";
 import {Modal} from '@/components/Modal/Modal';
-import {AddWorkModal} from "@/components/Modal/AddWorkModal/AddWorkModal";
+import {EditAndAddWorkModal} from "@/components/Modal/AddWorkModal/EditAndAddWorkModal";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/store"; // Import the Modal component
 
@@ -49,7 +49,7 @@ export const TodoColumn = () => {
 
             {/* Render the modal when open */}
             <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} title="افزودن کار جدید">
-                <AddWorkModal/>
+                <EditAndAddWorkModal onClose={() => setModalOpen(false)}/>
             </Modal>
         </div>
     );
