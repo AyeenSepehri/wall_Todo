@@ -7,6 +7,8 @@ import bellIcon from "../../../public/icons/bellIcon.svg";
 import trashIcon from "../../../public/icons/trashIcon.svg";
 import editIcon from "../../../public/icons/editIcon.svg";
 import {CardProps} from "@/components/Cards/types"; // Use the imported CardProps
+import jalaali from "jalaali-js";
+
 
 export const Card = ({cardData}: CardProps) => {
     const {
@@ -18,6 +20,31 @@ export const Card = ({cardData}: CardProps) => {
         startDate,
         endDate
     } = cardData;
+    console.log(registrationDate)
+
+    // Convert Date to Jalali format
+    const convertToJalaliDate = (gregorianDate: string): any => {
+        const date = new Date(gregorianDate);
+        const jalaliDate = jalaali.toJalaali(
+            date.getFullYear(),
+            date.getMonth() + 1, // JavaScript months are 0-indexed
+            date.getDate()
+        );
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+        // Format Jalali date as a string (YYYY/MM/DD)
+        return ({
+            date: `${jalaliDate.jy}/${jalaliDate.jm < 10 ? `0${jalaliDate.jm}` : jalaliDate.jm}/${jalaliDate.jd < 10 ? `0${jalaliDate.jd}` : jalaliDate.jd}`,
+            clock: `${hours}:${minutes}`
+        })
+
+    };
+
+    const formattedRegDate = convertToJalaliDate(registrationDate);
+    const formattedDeadline = convertToJalaliDate(deadline);
+
+
     return (
         <div
             className={`
@@ -65,8 +92,8 @@ export const Card = ({cardData}: CardProps) => {
                     <div className="flex flex-col">
                         {status === "todo" && (
                             <>
-                                <span className="text-md font-semibold">تاریخ ثبت: {registrationDate}</span>
-                                <span className="text-sm text-gray-600">ساعت: 16:15</span>
+                                <span className="text-md font-semibold">تاریخ ثبت: {formattedRegDate.date}</span>
+                                <span className="text-sm text-gray-600">ساعت: {formattedRegDate.clock}</span>
                             </>
                         )}
                         {(status === "inProgress" || status === "done") && (
@@ -87,8 +114,8 @@ export const Card = ({cardData}: CardProps) => {
                     <div className="flex flex-col">
                         {(status === "todo" || status === "inProgress") && (
                             <>
-                                <span className="text-md font-semibold">مهلت پایان: {deadline}</span>
-                                <span className="text-sm text-gray-600">ساعت: 16:15</span>
+                                <span className="text-md font-semibold">مهلت پایان: {formattedDeadline.date}</span>
+                                <span className="text-sm text-gray-600">ساعت: {formattedDeadline.clock}</span>
                             </>
                         )}
                         {status === "done" && (

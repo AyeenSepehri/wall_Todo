@@ -1,29 +1,34 @@
-import {HeaderSection} from "@/components/headerSection/HeaderSection";
-import {TodoColumn} from "@/components/ColumnOfWorks/TodoColumn/TodoColumn";
-import {InProgressColumn} from "@/components/ColumnOfWorks/InProgressColumn/InProgressColumn";
-import {DoneColumn} from "@/components/ColumnOfWorks/DoneColumn/DoneColumn";
+import { HeaderSection } from "@/components/headerSection/HeaderSection";
+import { TodoColumn } from "@/components/ColumnOfWorks/TodoColumn/TodoColumn";
+import { InProgressColumn } from "@/components/ColumnOfWorks/InProgressColumn/InProgressColumn";
+import { DoneColumn } from "@/components/ColumnOfWorks/DoneColumn/DoneColumn";
 
 export default function Home() {
-  return (
-      <div>
-          <div>
-              <HeaderSection/>
-          </div>
+    return (
+        <div>
+            <HeaderSection />
 
-          <div className="mx-auto my-12 border border-transparent border-b-amber-400 h-0.5 w-[90%]"/>
+            <div className="mx-auto my-12 border border-transparent border-b-amber-400 h-0.5 w-[90%]" />
 
-          <div className="flex items-center justify-around w-full">
-              <div className="w-1/3">
-                  <TodoColumn/>
-              </div>
-              <div className="w-1/3 mx-2">
-                  <InProgressColumn/>
-              </div>
-              <div className="w-1/3">
-                  <DoneColumn/>
-              </div>
-          </div>
-
-      </div>
-  );
+            {/* Container for the columns */}
+            <div className="flex justify-around w-full">
+                <div className="w-1/3">
+                    {/* Ensure columns align at the top */}
+                    <div className="flex flex-col h-full">
+                        <TodoColumn />
+                    </div>
+                </div>
+                <div className="w-1/3 mx-2">
+                    <div className="flex flex-col h-full">
+                        <InProgressColumn />
+                    </div>
+                </div>
+                <div className="w-1/3">
+                    <div className="flex flex-col h-full">
+                        <DoneColumn />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
