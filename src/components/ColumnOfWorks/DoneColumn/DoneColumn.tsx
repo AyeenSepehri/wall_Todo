@@ -39,7 +39,7 @@ export const DoneColumn = () => {
     ];
 
     return (
-        <div className="p-8 bg-white rounded-lg shadow-md shadow-lime-200">
+        <div className="w-full p-8 bg-white rounded-lg shadow-md shadow-lime-200">
             <div className="relative">
                 <div className="h-16 flex justify-center rounded-r-full bg-sedri-green items-center">
                     <span className="text-center text-2xl font-bold">کارهای انجام شده</span>

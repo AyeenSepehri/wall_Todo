@@ -12,14 +12,14 @@ export default function Home() {
 
           <div className="mx-auto my-12 border border-transparent border-b-amber-400 h-0.5 w-[90%]"/>
 
-          <div className="flex items-center justify-around">
-              <div>
+          <div className="flex items-center justify-around w-full">
+              <div className="w-1/3">
                   <TodoColumn/>
               </div>
-              <div>
+              <div className="w-1/3 mx-2">
                   <InProgressColumn/>
               </div>
-              <div>
+              <div className="w-1/3">
                   <DoneColumn/>
               </div>
           </div>
