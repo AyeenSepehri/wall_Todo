@@ -7,8 +7,9 @@ import { CardDataTypes } from "@/components/Cards/types";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/store/store";
 import {useEffect} from "react";
+import { useDroppable } from "@dnd-kit/core";
 
-export const InProgressColumn = () => {
+export const InProgressColumn = ({ id }: { id: string }) => {
     const todoState = useSelector((state: RootState) => state.works);
     const dispatch = useDispatch();
 
@@ -22,8 +23,21 @@ export const InProgressColumn = () => {
         return () => clearInterval(intervalId); // Cleanup the interval on component unmount
     }, [dispatch]);
 
+    // Use dndkit's useDroppable hook to make the column droppable
+    const { setNodeRef, isOver } = useDroppable({
+        id: id, // Column ID to match with the DnD context
+    });
+
+    // Add visual feedback if an item is dragged over this column
+    const droppableStyle = isOver
+        ? "bg-yellow-100" // Highlight background when an item is over the column
+        : "bg-white";
+
     return (
-        <div className="w-full p-8 bg-white rounded-lg shadow-md shadow-lime-200">
+        <div
+            ref={setNodeRef}
+            className={`w-full p-8 rounded-lg shadow-md shadow-lime-200 ${droppableStyle}`}
+        >
             <div className="relative">
                 <div className="h-16 flex justify-center rounded-r-full bg-sedri-green items-center">
                     <span className="text-center text-2xl font-bold">کارهای در حال انجام</span>

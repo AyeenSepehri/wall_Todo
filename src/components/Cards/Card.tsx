@@ -14,13 +14,14 @@ import {Modal} from "@/components/Modal/Modal";
 import {EditAndAddWorkModal} from "@/components/Modal/AddWorkModal/EditAndAddWorkModal";
 import {useDispatch} from "react-redux";
 import { deleteTodo } from "@/store/states/worksSlice";
-
+import { useDraggable } from "@dnd-kit/core";
 
 export const Card = ({cardData}: CardProps) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const dispatch = useDispatch()
 
     const {
+        id,
         title,
         registrationDate,
         deadline,
@@ -29,7 +30,6 @@ export const Card = ({cardData}: CardProps) => {
         startDate,
         endDate
     } = cardData;
-    console.log(registrationDate)
 
     // Convert Date to Jalali format
     const convertToJalaliDate = (gregorianDate: string): any => {
@@ -52,14 +52,30 @@ export const Card = ({cardData}: CardProps) => {
 
     const formattedRegDate = convertToJalaliDate(registrationDate);
     const formattedDeadline = convertToJalaliDate(deadline);
+    const formattedStartDate = convertToJalaliDate(startDate ? startDate : "");
+    const formattedEndDate = convertToJalaliDate(endDate ? endDate : "");
 
     const handleDelete = () => {
         dispatch(deleteTodo(cardData.id)); // Dispatch the deleteTodo action with the todo item's id
+    };
+    // Use dndkit's useDraggable hook to make the card draggable
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+        id: id, // Each card has a unique ID to handle dragging
+    });
+
+    // Style for smooth dragging experience
+    const style = {
+        transform: transform
+            ? `translate3d(${transform.x}px, ${transform.y}px, 0)` // Apply the drag transformation
+            : undefined,
     };
 
     return (
         <>
             <div
+
+                style={style}
+
                 className={`
                 ${status === "todo" && !isDelayed && "border-green-500" ||
                 status === "inProgress" && !isDelayed && "border-yellow-500" ||
@@ -75,6 +91,10 @@ export const Card = ({cardData}: CardProps) => {
                     isDelayed && "bg-red-100"
                     } py-8 px-10 rounded-lg shadow-xl hover:shadow-2xl h-72 flex flex-col justify-between`}
                 >
+                    <div ref={setNodeRef}
+                         {...listeners}
+                         {...attributes}
+                         >
                     <div className="pb-2 flex flex-wrap items-center w-full">
                         <span className="text-lg font-semibold">{title}</span>
                     </div>
@@ -111,10 +131,10 @@ export const Card = ({cardData}: CardProps) => {
                             )}
                             {(status === "inProgress" || status === "done") && (
                                 <>
-                                    <span className="text-md font-semibold">تاریخ شروع: {startDate}</span>
-                                    <div className="flex items-center mt-1">
-                                        <span className="text-sm text-gray-600">ساعت: 16:15</span>
-                                        <span className="text-sm text-red-500">(ثبت شده در: {registrationDate})</span>
+                                    <span className="text-md font-semibold">تاریخ شروع: {formattedStartDate.date}</span>
+                                    <div className="flex items-center mt-1 w-full">
+                                        <span className="text-sm text-gray-600">ساعت: {formattedStartDate.clock}</span>
+                                        <span className="text-sm text-red-500">(ثبت شده در: {formattedRegDate.date})</span>
                                     </div>
                                 </>
                             )}
@@ -133,10 +153,10 @@ export const Card = ({cardData}: CardProps) => {
                             )}
                             {status === "done" && (
                                 <>
-                                    <span className="text-md font-semibold">اتمام یافته: {endDate}</span>
+                                    <span className="text-md font-semibold">اتمام یافته: {formattedEndDate.date}</span>
                                     <div className="flex items-center mt-1 mb-2">
-                                        <span className="text-sm text-gray-600">ساعت: 16:15</span>
-                                        <span className="text-sm text-red-500">(تاریخ مهلت تا: {deadline})</span>
+                                        <span className="text-sm text-gray-600">ساعت: {formattedEndDate.clock}</span>
+                                        <span className="text-sm text-red-500">(تاریخ مهلت تا: {formattedDeadline.date})</span>
                                     </div>
 
                                 </>
@@ -144,15 +164,18 @@ export const Card = ({cardData}: CardProps) => {
 
                         </div>
                     </div>
-
-                    <div className="flex items-center gap-4 justify-end">
-                        <button onClick={handleDelete}>
-                            <Image src={trashIcon} alt={"trashIcon"}/>
-                        </button>
-                        <button onClick={() => setModalOpen(true)}>
-                            <Image src={editIcon} alt={"editIcon"}/>
-                        </button>
                     </div>
+                    {status !== "done" && (
+                        <div className="flex items-center gap-4 justify-end">
+                            <button onClick={handleDelete}>
+                                <Image src={trashIcon} alt={"trashIcon"}/>
+                            </button>
+                            <button onClick={() => setModalOpen(true)}>
+                                <Image src={editIcon} alt={"editIcon"}/>
+                            </button>
+                        </div>
+                    )}
+
                 </div>
             </div>
             {/* Render the modal when open */}

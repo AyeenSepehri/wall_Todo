@@ -28,8 +28,27 @@ const worksSlice = createSlice({
         deleteTodo: (state, action: PayloadAction<string>) => {
             return state.filter((todo) => todo.id !== action.payload);
         },
+        updateTodoStatus: (state, action) => {
+            const { id, status } = action.payload;
+            const todo = state.find(item => item.id === id);
+            if (todo) {
+                todo.status = status;
+            }
+        },
+        setStartEndDate: (state, action) => {
+            const todo = state.find(item => item.id === action.payload.id);
+            if (todo) {
+                todo.startDate = action.payload.startDate ? action.payload.startDate : null;
+                todo.endDate = action.payload.endDate ? action.payload.endDate : null;
+            }
+        }
     },
 });
 
-export const { addOrUpdateTodo, deleteTodo } = worksSlice.actions;
+export const {
+    addOrUpdateTodo,
+    deleteTodo ,
+    updateTodoStatus,
+    setStartEndDate
+} = worksSlice.actions;
 export default worksSlice.reducer;
