@@ -1,9 +1,27 @@
 import Image from "next/image";
-import ayeenAvatar from "../../../public/AyeenAvatar.jpg"
-import dateBg from "../../../public/dateBg1.png"
+import ayeenAvatar from "../../../public/AyeenAvatar.jpg";
+import dateBg from "../../../public/dateBg1.png";
+import { toJalaali } from "jalaali-js"; // Correct import
 
 export const HeaderSection = () => {
-    return(
+    // Get the current date in the Gregorian calendar
+    const today = new Date();
+
+    // Convert the current Gregorian date to the Jalali date
+    const jalaaliDate = toJalaali(today.getFullYear(), today.getMonth() + 1, today.getDate());
+
+    // Extract day, month, and year
+    const jalaaliDay = jalaaliDate.jd;
+    const jalaaliMonth = jalaaliDate.jm;
+    const jalaaliYear = jalaaliDate.jy;
+
+    // Create a mapping for Jalali month names
+    const jalaaliMonthNames = [
+        "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+        "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
+    ];
+
+    return (
         <>
             <div className="flex items-center justify-between border-b-amber-400">
                 <div className="flex items-center">
@@ -19,12 +37,13 @@ export const HeaderSection = () => {
                     <div>
                         <Image className="w-[160px]" src={dateBg} alt={"dateBg"}/>
                     </div>
-                    <div className="absolute flex flex-col text-gray-500 text-2xl top-7 left-4">
+                    <div className="absolute flex flex-col text-gray-500 text-2xl top-7 left-3">
                         <span>امروز</span>
-                        <span>6/مهر/1403</span>
+                        {/* Dynamically display the current Jalali date */}
+                        <span>{`${jalaaliDay}/${jalaaliMonthNames[jalaaliMonth - 1]}/${jalaaliYear}`}</span>
                     </div>
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
