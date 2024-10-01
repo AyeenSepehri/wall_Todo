@@ -1,42 +1,26 @@
+"use client"
 import Image from "next/image";
 import inProgressIcon from "../../../../public/icons/inProgressIcon.svg";
 import plusSignIcon from "../../../../public/icons/plusSign.svg";
 import { Card } from "@/components/Cards/Card";
 import { CardDataTypes } from "@/components/Cards/types";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/store/store";
+import {useEffect} from "react";
 
 export const InProgressColumn = () => {
-    const demoTodoData: CardDataTypes[] = [
-        {
-            id: 1,
-            title: "طراحی لوگو برای سایت آرایشی سفورا",
-            registrationDate: "1403/7/4",
-            deadline: "1403/7/10",
-            status: "inProgress",
-            isDelayed: false,
-            startDate: "1403/7/7",
-            endDate: null,
-        },
-        {
-            id: 2,
-            title: "پاشم یه گوهی بخورم",
-            registrationDate: "1403/7/4",
-            deadline: "1403/7/10",
-            status: "inProgress",
-            isDelayed: true,
-            startDate: "1403/7/7",
-            endDate: null,
-        },
-        {
-            id: 3,
-            title: "یه عشق و حال ریز",
-            registrationDate: "1403/7/4",
-            deadline: "1403/7/6",
-            status: "inProgress",
-            isDelayed: false,
-            startDate: "1403/7/7",
-            endDate: null,
-        },
-    ];
+    const todoState = useSelector((state: RootState) => state.works);
+    const dispatch = useDispatch();
+
+    const inProgressItems: CardDataTypes[] = todoState.filter(item => item.status === 'inProgress');
+    useEffect(() => {
+        // Set an interval to check every minute for delayed todos
+        const intervalId = setInterval(() => {
+            dispatch({ type: 'todos/checkDeadlines' }); // Trigger the checkDeadlines logic
+        }, 60000); // 1 minute interval
+
+        return () => clearInterval(intervalId); // Cleanup the interval on component unmount
+    }, [dispatch]);
 
     return (
         <div className="w-full p-8 bg-white rounded-lg shadow-md shadow-lime-200">
@@ -61,7 +45,7 @@ export const InProgressColumn = () => {
             </div>
 
             <div>
-                {demoTodoData.map((item) => (
+                {inProgressItems.map((item) => (
                     <div key={item.id}>
                         <Card cardData={item} />
                     </div>

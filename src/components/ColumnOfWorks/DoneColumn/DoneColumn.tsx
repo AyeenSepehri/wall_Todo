@@ -1,42 +1,16 @@
+"use client"
 import Image from "next/image";
 import doneTickSignIcon from "../../../../public/icons/doneTickSign.svg";
 import plusSignIcon from "../../../../public/icons/plusSign.svg";
 import { Card } from "@/components/Cards/Card";
 import { CardDataTypes } from "@/components/Cards/types";
+import {useSelector} from "react-redux";
+import {RootState} from "@/store/store";
 
 export const DoneColumn = () => {
-    const demoTodoData: CardDataTypes[] = [
-        {
-            id: 1,
-            title: "طراحی لوگو برای سایت آرایشی سفورا",
-            registrationDate: "1403/7/4",
-            deadline: "1403/7/10",
-            status: "done",
-            isDelayed: false,
-            startDate: "1403/7/7",
-            endDate: "1403/7/12",
-        },
-        {
-            id: 2,
-            title: "پاشم یه گوهی بخورم",
-            registrationDate: "1403/7/4",
-            deadline: "1403/7/10",
-            status: "done",
-            isDelayed: true,
-            startDate: "1403/7/7",
-            endDate: "1403/7/12",
-        },
-        {
-            id: 3,
-            title: "یه عشق و حال ریز",
-            registrationDate: "1403/7/4",
-            deadline: "1403/7/6",
-            status: "done",
-            isDelayed: false,
-            startDate: "1403/7/7",
-            endDate: "1403/7/12",
-        },
-    ];
+    const todoState = useSelector((state: RootState) => state.works);
+
+    const todoItems: CardDataTypes[] = todoState.filter(item => item.status === 'done');
 
     return (
         <div className="w-full p-8 bg-white rounded-lg shadow-md shadow-lime-200">
@@ -61,7 +35,7 @@ export const DoneColumn = () => {
             </div>
 
             <div>
-                {demoTodoData.map((item) => (
+                {todoItems.map((item) => (
                     <div key={item.id}>
                         <Card cardData={item} />
                     </div>
