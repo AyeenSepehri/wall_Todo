@@ -52,8 +52,8 @@ export const Card = ({cardData}: CardProps) => {
 
     const formattedRegDate = convertToJalaliDate(registrationDate);
     const formattedDeadline = convertToJalaliDate(deadline);
-    const formattedStartDate = convertToJalaliDate(startDate ? startDate : "");
-    const formattedEndDate = convertToJalaliDate(endDate ? endDate : "");
+    const formattedStartDate = startDate ? convertToJalaliDate(startDate ? startDate : "") : "";
+    const formattedEndDate = endDate ? convertToJalaliDate(endDate ? endDate : "") : "";
 
     const handleDelete = () => {
         dispatch(deleteTodo(cardData.id)); // Dispatch the deleteTodo action with the todo item's id
@@ -89,7 +89,7 @@ export const Card = ({cardData}: CardProps) => {
                     status === "inProgress" && !isDelayed && "bg-yellow-100" ||
                     status === "done" && !isDelayed && "bg-blue-100" ||
                     isDelayed && "bg-red-100"
-                    } py-8 px-10 rounded-lg shadow-xl hover:shadow-2xl h-72 flex flex-col justify-between`}
+                    } py-8 px-10 rounded-lg shadow-xl hover:shadow-2xl h-72 flex flex-col justify-between gap-2`}
                 >
                     <div ref={setNodeRef}
                          {...listeners}
@@ -120,7 +120,7 @@ export const Card = ({cardData}: CardProps) => {
                     </div>
 
 
-                    <div className="flex items-start mb-5">
+                    <div className={`flex items-start ${status === "todo" && !isDelayed && "mt-8"} mb-5`}>
                         <Image className="ml-2" src={calendarIcon} alt={"calendarIcon"}/>
                         <div className="flex flex-col">
                             {status === "todo" && (

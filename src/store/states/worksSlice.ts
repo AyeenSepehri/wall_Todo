@@ -36,12 +36,20 @@ const worksSlice = createSlice({
             }
         },
         setStartEndDate: (state, action) => {
-            const todo = state.find(item => item.id === action.payload.id);
+            const { id, startDate, endDate } = action.payload;
+            const todo = state.find(item => item.id === id);
             if (todo) {
-                todo.startDate = action.payload.startDate ? action.payload.startDate : null;
-                todo.endDate = action.payload.endDate ? action.payload.endDate : null;
+                // Only set startDate if it doesn't already exist (prevent overwriting)
+                if (startDate && !todo.startDate) {
+                    todo.startDate = startDate;
+                }
+
+                // Always update endDate when provided (only for 'done' column)
+                if (endDate) {
+                    todo.endDate = endDate;
+                }
             }
-        }
+        },
     },
 });
 
