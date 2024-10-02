@@ -39,8 +39,8 @@ const worksSlice = createSlice({
             const { id, startDate, endDate } = action.payload;
             const todo = state.find(item => item.id === id);
             if (todo) {
-                // Only set startDate if it doesn't already exist (prevent overwriting)
-                if (startDate && !todo.startDate) {
+                // Always update startDate when moving to 'inProgress' column
+                if (startDate) {
                     todo.startDate = startDate;
                 }
 

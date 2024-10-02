@@ -28,7 +28,7 @@ export const HeaderSection = () => {
                     <Image className="w-[100px] rounded-full border-8" src={ayeenAvatar} alt={"ayeenAvatar"}/>
                     <div className='flex flex-col mr-1.5'>
                         <h2 className="text-2xl font-extrabold">آیین سپهری</h2>
-                        <span className="text-lg text-gray-500">sepehriayeen96prgr@gmail.com</span>
+                        <span className="font-sans text-lg text-gray-500">sepehriayeen96prgr@gmail.com</span>
                         <span className="text-lg text-gray-500">09109847148</span>
                     </div>
                 </div>

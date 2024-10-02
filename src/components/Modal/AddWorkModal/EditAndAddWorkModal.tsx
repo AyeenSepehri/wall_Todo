@@ -66,14 +66,13 @@ export const EditAndAddWorkModal = ({onClose, todoItem}: EditAndAddWorkModalProp
 
     const handleAddWork = () => {
         if (!title || !selectedDate) {
-            alert("Please fill out all fields!");
+            alert("لطفا تمام فیلد ها را پر کنید!");
             return;
         }
 
         const registrationDate = new Date(); // Exact time when the button is clicked
         const deadline = createDeadlineDate(selectedDate, selectedHour, selectedMinute); // Combine date and time for deadline
 
-        console.log(registrationDate, deadline)
         if (!deadline) {
             alert("Invalid date or time selected!");
             return;
@@ -86,9 +85,9 @@ export const EditAndAddWorkModal = ({onClose, todoItem}: EditAndAddWorkModalProp
                 title,
                 registrationDate: registrationDate.toISOString(), // Dispatch registration date as a string in ISO format
                 deadline: deadline.toISOString(), // Dispatch deadline date as a string in ISO format
-                status: "todo", // Default status for new todos
-                isDelayed: false,
-                startDate: null,
+                status: todoItem?.status ? todoItem?.status : "todo", // Default status for new todos
+                isDelayed: todoItem?.isDelayed ? todoItem?.isDelayed : false,
+                startDate: todoItem?.startDate ? todoItem?.startDate : null,
                 endDate: null,
             })
         );
@@ -159,7 +158,7 @@ export const EditAndAddWorkModal = ({onClose, todoItem}: EditAndAddWorkModalProp
                     className="bg-sedri-green rounded-3xl px-10 py-3"
                     onClick={handleAddWork}
                 >
-                    افزودن کار
+                    {todoItem ? "ویرایش کار" : "افزودن کار"}
                 </button>
             </div>
         </div>

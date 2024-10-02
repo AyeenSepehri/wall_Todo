@@ -4,7 +4,7 @@ import "./globals.css";
 import {ReduxProvider} from "@/app/ReduxProvider";
 
 const farsiFont = localFont({
-    src: "./fonts/Shabnam.woff", // Ensure this path is correct
+    src: "./fonts/IRANSansWeb(FaNum).woff", // Ensure this path is correct
     variable: "--font-farsi-shabnam",
     weight: "100 900",
 });
