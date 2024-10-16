@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 
 const ColumnSection = dynamic(() => import('@/components/ColumnSection/ColumnSection'), { ssr: false });
 
-
 export default function Home() {
     return (
         <div>

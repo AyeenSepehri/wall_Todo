@@ -1,7 +1,6 @@
 "use client"
 import {closestCenter, DndContext, DragEndEvent} from "@dnd-kit/core";
 import {rectSortingStrategy, SortableContext} from "@dnd-kit/sortable";
-// import {Column} from "@/components/ColumnOfWorks/Column";
 import {useDispatch} from "react-redux";
 import {setStartEndDate, updateTodoStatus} from "@/store/states/worksSlice";
 import dynamic from 'next/dynamic';
